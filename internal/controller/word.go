@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"gsn-wordle/internal/pkg/config"
 	"gsn-wordle/internal/pkg/errs"
 	"gsn-wordle/internal/pkg/util"
 	"gsn-wordle/internal/service"
@@ -95,7 +96,8 @@ func (c *WordController) Create(ctx *gin.Context) {
 	}
 
 	// 创建单词
-	if err := c.s.Create(data.Subject, data.Word, data.Definition); err != nil {
+	id, err := c.s.Create(data.Subject, data.Word, data.Definition)
+	if err != nil {
 		if err == errs.ErrServer {
 			util.InternalErrResponse(ctx)
 			return
@@ -107,6 +109,14 @@ func (c *WordController) Create(ctx *gin.Context) {
 			"data": nil,
 		})
 		return
+	}
+
+	// 如果为管理员添加单词，直接设置为激活状态
+	if ctx.Request.Header.Get("Admin-Auth") == config.Config.Server.AdminPassword {
+		if err := c.s.UpdateActiveState(id, true); err != nil {
+			util.InternalErrResponse(ctx)
+			return
+		}
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{
@@ -157,6 +167,27 @@ func (c *WordController) Delete(ctx *gin.Context) {
 
 	// 删除单词
 	if c.s.Delete(id) != nil {
+		util.InternalErrResponse(ctx)
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"code": http.StatusOK,
+		"msg":  "success",
+		"data": nil,
+	})
+}
+
+func (c *WordController) SetActiveState(ctx *gin.Context) {
+	// REST 参数校验
+	id, _ := strconv.Atoi(ctx.Param("id"))
+	active, err := strconv.ParseBool(ctx.Param("active"))
+	if err != nil || id == 0 {
+		util.ParamErrResponse(ctx)
+		return
+	}
+
+	if c.s.UpdateActiveState(id, active) != nil {
 		util.InternalErrResponse(ctx)
 		return
 	}

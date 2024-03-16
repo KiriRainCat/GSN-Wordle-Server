@@ -19,16 +19,22 @@ func (*WordDao) GetById(id int) (word *model.Word, err error) {
 	return
 }
 
-func (*WordDao) Create(subject string, word string, definition string) error {
-	return DB.Create(&model.Word{Subject: subject, Value: word, Definition: definition, Length: len(word)}).Error
+func (*WordDao) Create(subject string, word string, definition string) (int, error) {
+	data := model.Word{Subject: subject, Value: word, Definition: definition, Length: len(word)}
+	result := DB.Create(&data)
+	return data.Id, result.Error
 }
 
 func (*WordDao) Update(id int, subject string, word string, definition string) error {
-	return DB.Save(&model.Word{Id: id, Subject: subject, Value: word, Definition: definition, Length: len(word)}).Error
+	return DB.Model(&model.Word{Id: id}).Updates(map[string]any{"subject": subject, "value": word, "length": len(word)}).Error
 }
 
 func (*WordDao) Delete(id int) error {
 	return DB.Delete(&model.Word{}, id).Error
+}
+
+func (*WordDao) SetActiveState(id int, active bool) error {
+	return DB.Model(&model.Word{Id: id}).Select("active").UpdateColumn("active", active).Error
 }
 
 func (dao *WordDao) GetWordOfTheDay() (word *model.Word, err error) {

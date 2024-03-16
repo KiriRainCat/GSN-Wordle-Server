@@ -44,15 +44,16 @@ func (s *WordService) GetRandomWord() (word *model.Word, err error) {
 	return list[rand.Intn(len(list))], nil
 }
 
-func (s *WordService) Create(subject string, word string, definition string) error {
-	if err := s.dao.Create(subject, word, definition); err != nil {
+func (s *WordService) Create(subject string, word string, definition string) (wordId int, err error) {
+	wordId, err = s.dao.Create(subject, word, definition)
+	if err != nil {
 		if util.IsViolatingUniqueConstraint(err) {
-			return errs.ErrUniqueConstraint("word")
+			return 0, errs.ErrUniqueConstraint("word")
 		}
-		return errs.ErrServer
+		return 0, errs.ErrServer
 	}
 
-	return nil
+	return
 }
 
 func (s *WordService) Update(id int, subject string, word string, definition string) error {
@@ -61,4 +62,8 @@ func (s *WordService) Update(id int, subject string, word string, definition str
 
 func (s *WordService) Delete(id int) error {
 	return s.dao.Delete(id)
+}
+
+func (s *WordService) UpdateActiveState(id int, active bool) error {
+	return s.dao.SetActiveState(id, active)
 }

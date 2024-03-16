@@ -11,6 +11,7 @@ type Server struct {
 	Port          string `mapstructure:"port" json:"port,omitempty" yaml:"port"`
 	EncryptSalt   string `mapstructure:"encrypt_salt" json:"encrypt_salt" yaml:"encrypt_salt"`
 	RequestAuth   string `mapstructure:"request_auth" json:"request_auth" yaml:"request_auth"`
+	AdminPassword string `mapstructure:"admin_password" json:"admin_password" yaml:"admin_password"`
 	JwtEncrypt    string `mapstructure:"jwt_encrypt" json:"jwt_encrypt" yaml:"jwt_encrypt"`
 	JwtIssuer     string `mapstructure:"jwt_issuer" json:"jwt_issuer" yaml:"jwt_issuer"`
 	FileStorePath string `mapstructure:"file_store_path" json:"file_store_path" yaml:"file_store_path"`

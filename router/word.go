@@ -2,6 +2,7 @@ package router
 
 import (
 	"gsn-wordle/internal/controller"
+	"gsn-wordle/internal/middleware"
 
 	"github.com/gin-gonic/gin"
 )
@@ -20,4 +21,7 @@ func WordRoutes(r *gin.RouterGroup) {
 	g.POST("/word", c.Create)
 	g.PUT("/word/:id", c.Update)
 	g.DELETE("/word/:id", c.Delete)
+
+	// Admin Auth Required Routes
+	g.PUT("/word/:id/:state", middleware.Auth.AuthenticateAdmin, c.SetActiveState)
 }
