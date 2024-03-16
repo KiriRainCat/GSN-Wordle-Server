@@ -26,7 +26,7 @@ func (*WordDao) Create(subject string, word string, definition string) (int, err
 }
 
 func (*WordDao) Update(id int, subject string, word string, definition string) error {
-	return DB.Model(&model.Word{Id: id}).Updates(map[string]any{"subject": subject, "value": word, "length": len(word)}).Error
+	return DB.Model(&model.Word{Id: id}).Updates(map[string]any{"subject": subject, "value": word, "definition": definition, "length": len(word)}).Error
 }
 
 func (*WordDao) Delete(id int) error {
