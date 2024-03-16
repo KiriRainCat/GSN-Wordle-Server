@@ -19,12 +19,12 @@ func (*WordDao) GetById(id int) (word *model.Word, err error) {
 	return
 }
 
-func (*WordDao) Create(word string, definition string) error {
-	return DB.Create(&model.Word{Value: word, Definition: definition, Length: len(word)}).Error
+func (*WordDao) Create(subject string, word string, definition string) error {
+	return DB.Create(&model.Word{Subject: subject, Value: word, Definition: definition, Length: len(word)}).Error
 }
 
-func (*WordDao) Update(id int, word string, definition string) error {
-	return DB.Save(&model.Word{Id: id, Value: word, Definition: definition, Length: len(word)}).Error
+func (*WordDao) Update(id int, subject string, word string, definition string) error {
+	return DB.Save(&model.Word{Id: id, Subject: subject, Value: word, Definition: definition, Length: len(word)}).Error
 }
 
 func (*WordDao) Delete(id int) error {

@@ -82,6 +82,7 @@ func (c *WordController) GetRandomWord(ctx *gin.Context) {
 func (c *WordController) Create(ctx *gin.Context) {
 	// 参数模型
 	type json struct {
+		Subject    string `json:"subject"`
 		Word       string `json:"word" binding:"required"`
 		Definition string `json:"definition" binding:"required"`
 	}
@@ -94,7 +95,7 @@ func (c *WordController) Create(ctx *gin.Context) {
 	}
 
 	// 创建单词
-	if err := c.s.Create(data.Word, data.Definition); err != nil {
+	if err := c.s.Create(data.Subject, data.Word, data.Definition); err != nil {
 		if err == errs.ErrServer {
 			util.InternalErrResponse(ctx)
 			return
@@ -118,6 +119,7 @@ func (c *WordController) Create(ctx *gin.Context) {
 func (c *WordController) Update(ctx *gin.Context) {
 	// 参数模型
 	type json struct {
+		Subject    string `json:"subject"`
 		Word       string `json:"word" binding:"required"`
 		Definition string `json:"definition" binding:"required"`
 	}
@@ -133,7 +135,7 @@ func (c *WordController) Update(ctx *gin.Context) {
 	}
 
 	// 更新单词信息
-	if err := c.s.Update(id, data.Word, data.Definition); err != nil {
+	if err := c.s.Update(id, data.Subject, data.Word, data.Definition); err != nil {
 		util.InternalErrResponse(ctx)
 		return
 	}
