@@ -24,10 +24,19 @@ func main() {
 	// Create gin-engine and base router-group
 	server := gin.New()
 
+	// CORS
 	server.Use(func(ctx *gin.Context) {
 		ctx.Header("Access-Control-Allow-Origin", "*")
 		ctx.Header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
 		ctx.Header("Access-Control-Allow-Headers", "*")
+	})
+
+	// OPTIONS 请求
+	server.Use(func(ctx *gin.Context) {
+		if ctx.Request.Method == "OPTIONS" {
+			ctx.JSON(http.StatusOK, "OPTIONS PASS")
+		}
+		ctx.Next()
 	})
 
 	r := server.Group("/api")
