@@ -5,6 +5,7 @@ import (
 	"gsn-wordle/internal/middleware"
 	"gsn-wordle/internal/pkg/config"
 	"gsn-wordle/internal/pkg/util"
+	"gsn-wordle/router"
 	"log"
 	"net/http"
 	"os"
@@ -45,6 +46,7 @@ func main() {
 	})
 
 	// Register API Routes
+	router.WordRoutes(r)
 
 	// Websocket P2P
 	// r.GET("/ws/p2p", rtc.Signal.SignalP2P)

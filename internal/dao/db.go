@@ -2,6 +2,7 @@ package dao
 
 import (
 	"context"
+	"gsn-wordle/internal/model"
 	"gsn-wordle/internal/pkg/config"
 	"gsn-wordle/internal/pkg/util"
 	"log"
@@ -52,7 +53,7 @@ func InitDB() {
 	})
 
 	// Migrate struct model to database
-	err := DB.AutoMigrate()
+	err := DB.AutoMigrate(&model.Word{})
 	if err != nil {
 		log.Fatal(err)
 	}
