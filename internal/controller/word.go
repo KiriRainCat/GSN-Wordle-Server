@@ -118,7 +118,7 @@ func (c *WordController) Create(ctx *gin.Context) {
 func (c *WordController) Update(ctx *gin.Context) {
 	// 参数模型
 	type json struct {
-		Word       string `json:"name" binding:"required"`
+		Word       string `json:"word" binding:"required"`
 		Definition string `json:"definition" binding:"required"`
 	}
 
