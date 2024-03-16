@@ -1,0 +1,8 @@
+{
+  "files.exclude": {
+    "storage": true,
+    "log": true,
+    "*.exe": true
+  },
+  "cSpell.words": ["Wordle"]
+}

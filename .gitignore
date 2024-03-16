@@ -1,0 +1,11 @@
+# Vscode
+.vscode/**
+!.vscode/settings.json
+
+# Sensitive Files
+log
+storage
+config.yaml
+
+# Other
+*.exe
