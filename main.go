@@ -54,6 +54,15 @@ func main() {
 		})
 	})
 
+	// Admin Verification API
+	r.GET("/admin", middleware.Auth.AuthenticateAdmin, func(ctx *gin.Context) {
+		ctx.JSON(http.StatusOK, gin.H{
+			"code": http.StatusOK,
+			"msg":  "PASS",
+			"data": nil,
+		})
+	})
+
 	// Register API Routes
 	router.WordRoutes(r)
 
