@@ -23,5 +23,7 @@ func WordRoutes(r *gin.RouterGroup) {
 	g.DELETE("/word/:id", c.Delete)
 
 	// Admin Auth Required Routes
+	g.GET("/commits", middleware.Auth.AuthenticateAdmin, c.GetCommits)
+	g.POST("/commit/approve/:id", middleware.Auth.AuthenticateAdmin, c.ApproveCommit)
 	g.PUT("/word/:id/:state", middleware.Auth.AuthenticateAdmin, c.SetActiveState)
 }

@@ -53,7 +53,7 @@ func InitDB() {
 	})
 
 	// Migrate struct model to database
-	err := DB.AutoMigrate(&model.Word{})
+	err := DB.AutoMigrate(&model.Word{}, &model.Commit{})
 	if err != nil {
 		log.Fatal(err)
 	}

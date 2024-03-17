@@ -144,10 +144,19 @@ func (c *WordController) Update(ctx *gin.Context) {
 		return
 	}
 
-	// 更新单词信息
-	if err := c.s.Update(id, data.Subject, data.Word, data.Definition); err != nil {
-		util.InternalErrResponse(ctx)
-		return
+	// 判断是否为管理员操作
+	if ctx.Request.Header.Get("Admin-Auth") == config.Config.Server.AdminPassword {
+		// 更新单词信息
+		if err := c.s.Update(id, data.Subject, data.Word, data.Definition); err != nil {
+			util.InternalErrResponse(ctx)
+			return
+		}
+	} else {
+		// 提交单词更新申请
+		if err := c.s.CommitUpdate(id, data.Subject, data.Word, data.Definition); err != nil {
+			util.InternalErrResponse(ctx)
+			return
+		}
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{
@@ -178,6 +187,8 @@ func (c *WordController) Delete(ctx *gin.Context) {
 	})
 }
 
+//* ------------------------------ Admin APIs ------------------------------ *//
+
 func (c *WordController) SetActiveState(ctx *gin.Context) {
 	// REST 参数校验
 	id, _ := strconv.Atoi(ctx.Param("id"))
@@ -188,6 +199,41 @@ func (c *WordController) SetActiveState(ctx *gin.Context) {
 	}
 
 	if c.s.UpdateActiveState(id, active) != nil {
+		util.InternalErrResponse(ctx)
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"code": http.StatusOK,
+		"msg":  "success",
+		"data": nil,
+	})
+}
+
+func (c *WordController) GetCommits(ctx *gin.Context) {
+	commits, err := c.s.GetCommits()
+	if err != nil {
+		util.InternalErrResponse(ctx)
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"code": http.StatusOK,
+		"msg":  "success",
+		"data": commits,
+	})
+}
+
+func (c *WordController) ApproveCommit(ctx *gin.Context) {
+	// REST 参数校验
+	id, err := strconv.Atoi(ctx.Param("id"))
+	if err != nil {
+		util.ParamErrResponse(ctx)
+		return
+	}
+
+	// 审核提交
+	if c.s.ApproveCommit(id) != nil {
 		util.InternalErrResponse(ctx)
 		return
 	}

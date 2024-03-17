@@ -3,6 +3,7 @@ package dao
 import (
 	"context"
 	"gsn-wordle/internal/model"
+	"gsn-wordle/internal/pkg/util"
 )
 
 var Word = &WordDao{}
@@ -52,5 +53,5 @@ func (dao *WordDao) GetWordOfTheDay() (word *model.Word, err error) {
 }
 
 func (*WordDao) SetWordOfTheDay(id int) error {
-	return Redis.Set(context.Background(), "wordOfTheDay", id, 0).Err()
+	return Redis.Set(context.Background(), "wordOfTheDay", id, util.GetSecondsRemainForDay()).Err()
 }

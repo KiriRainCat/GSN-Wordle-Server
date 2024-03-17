@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"os"
 	"path/filepath"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -33,4 +34,10 @@ func Encode(obj any) []byte {
 	}
 
 	return bytes
+}
+
+func GetSecondsRemainForDay() time.Duration {
+	todayLast := time.Now().Format("2006-01-02") + " 23:59:59"
+	todayLastTime, _ := time.ParseInLocation("2006-01-02 15:04:05", todayLast, time.Local)
+	return time.Duration(todayLastTime.Unix()-time.Now().Local().Unix()) * time.Second
 }

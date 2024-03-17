@@ -30,6 +30,9 @@ func (s *WordService) GetWordOfTheDay() (word *model.Word, err error) {
 		if err != nil {
 			return nil, err
 		}
+
+		// 将词语存入 Redis
+		s.dao.SetWordOfTheDay(word.Id)
 	}
 
 	return
@@ -58,6 +61,33 @@ func (s *WordService) Create(subject string, word string, definition string) (wo
 
 func (s *WordService) Update(id int, subject string, word string, definition string) error {
 	return s.dao.Update(id, subject, word, definition)
+}
+
+func (s *WordService) GetCommits() ([]*model.Commit, error) {
+	return dao.Commit.GetList()
+}
+
+func (s *WordService) CommitUpdate(id int, subject string, word string, definition string) error {
+	return dao.Commit.Create(id, subject, word, definition)
+}
+
+func (s *WordService) ApproveCommit(id int) error {
+	commit, err := dao.Commit.GetByID(id)
+	if err != nil {
+		return err
+	}
+
+	err = s.Update(commit.WordId, commit.Subject, commit.Word, commit.Definition)
+	if err != nil {
+		return err
+	}
+
+	err = dao.Commit.Delete(id)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (s *WordService) Delete(id int) error {
