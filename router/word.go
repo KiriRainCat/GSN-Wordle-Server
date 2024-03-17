@@ -25,5 +25,6 @@ func WordRoutes(r *gin.RouterGroup) {
 	g.DELETE("/word/:id", middleware.Auth.AuthenticateAdmin, c.Delete)
 	g.GET("/commits", middleware.Auth.AuthenticateAdmin, c.GetCommits)
 	g.POST("/commit/approve/:id", middleware.Auth.AuthenticateAdmin, c.ApproveCommit)
+	g.DELETE("/commit/:id", middleware.Auth.AuthenticateAdmin, c.DeleteCommit)
 	g.PUT("/word/:id/:active", middleware.Auth.AuthenticateAdmin, c.SetActiveState)
 }

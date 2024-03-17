@@ -244,3 +244,24 @@ func (c *WordController) ApproveCommit(ctx *gin.Context) {
 		"data": nil,
 	})
 }
+
+func (c *WordController) DeleteCommit(ctx *gin.Context) {
+	// REST 参数校验
+	id, err := strconv.Atoi(ctx.Param("id"))
+	if err != nil {
+		util.ParamErrResponse(ctx)
+		return
+	}
+
+	// 审核提交
+	if c.s.DeleteCommit(id) != nil {
+		util.InternalErrResponse(ctx)
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"code": http.StatusOK,
+		"msg":  "success",
+		"data": nil,
+	})
+}

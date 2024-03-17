@@ -90,6 +90,15 @@ func (s *WordService) ApproveCommit(id int) error {
 	return nil
 }
 
+func (s *WordService) DeleteCommit(id int) error {
+	err := dao.Commit.Delete(id)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (s *WordService) Delete(id int) error {
 	return s.dao.Delete(id)
 }
