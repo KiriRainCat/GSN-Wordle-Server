@@ -1,4 +1,4 @@
-# GSN Wordle
+# GSN Wordle Server
 
 ## 项目简介
 
